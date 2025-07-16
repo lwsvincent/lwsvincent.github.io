@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>地點記錄 - 財產盤點系統</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://unpkg.com/@zxing/library@latest"></script>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>地點記錄系統</h1>
+            <div class="nav-buttons">
+                <button onclick="location.href='index.html'" class="nav-btn">財產盤點</button>
+            </div>
+        </header>
+
+        <main>
+            <!-- Google Sheets 設定區 -->
+            <section class="config-section">
+                <h2>Google Sheets 設定</h2>
+                <div class="input-group">
+                    <label for="sheetsUrl">Google Sheets URL:</label>
+                    <input type="text" id="sheetsUrl" placeholder="貼上您的 Google Sheets 分享連結">
+                </div>
+                <div class="input-group">
+                    <label for="worksheetName">工作表名稱:</label>
+                    <input type="text" id="worksheetName" value="位置記錄" placeholder="工作表名稱">
+                </div>
+                <button onclick="connectToSheets()" class="btn btn-primary">連接試算表</button>
+                <div id="connectionStatus" class="status"></div>
+            </section>
+
+            <!-- 步驟指示 -->
+            <section class="steps-section">
+                <h2>記錄步驟</h2>
+                <div class="steps">
+                    <div class="step" id="step1">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <h3>掃描地點 QR Code</h3>
+                            <p>請先掃描地點的 QR Code</p>
+                        </div>
+                    </div>
+                    <div class="step" id="step2">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <h3>掃描儀器 QR Code</h3>
+                            <p>接著掃描儀器的 QR Code</p>
+                        </div>
+                    </div>
+                    <div class="step" id="step3">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <h3>確認並儲存</h3>
+                            <p>確認資訊後儲存記錄</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- QR Code 掃描區 -->
+            <section class="scanner-section">
+                <h2 id="scannerTitle">掃描地點 QR Code</h2>
+                <div class="scanner-container">
+                    <video id="video" autoplay muted playsinline></video>
+                    <canvas id="canvas" style="display: none;"></canvas>
+                </div>
+                <div class="scanner-controls">
+                    <button onclick="startScanner()" class="btn btn-primary">開始掃描</button>
+                    <button onclick="stopScanner()" class="btn btn-secondary">停止掃描</button>
+                    <button onclick="resetProcess()" class="btn btn-outline">重新開始</button>
+                </div>
+                <div id="scanResult" class="scan-result"></div>
+            </section>
+
+            <!-- 手動輸入區 -->
+            <section class="manual-input-section">
+                <h2>手動輸入</h2>
+                <div class="input-grid">
+                    <div class="input-group">
+                        <label for="locationCode">地點代碼:</label>
+                        <input type="text" id="locationCode" placeholder="掃描或輸入地點代碼">
+                        <button onclick="setLocationManually()" class="btn btn-small">設定地點</button>
+                    </div>
+                    <div class="input-group">
+                        <label for="equipmentCode">儀器編號:</label>
+                        <input type="text" id="equipmentCode" placeholder="掃描或輸入儀器編號">
+                        <button onclick="setEquipmentManually()" class="btn btn-small">設定儀器</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 當前狀態顯示 -->
+            <section class="status-section">
+                <h2>當前狀態</h2>
+                <div class="status-grid">
+                    <div class="status-item">
+                        <div class="status-label">地點:</div>
+                        <div id="currentLocation" class="status-value">未設定</div>
+                    </div>
+                    <div class="status-item">
+                        <div class="status-label">儀器:</div>
+                        <div id="currentEquipment" class="status-value">未設定</div>
+                    </div>
+                    <div class="status-item">
+                        <div class="status-label">時間:</div>
+                        <div id="currentTime" class="status-value">-</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 記錄確認和儲存 -->
+            <section class="record-section" id="recordSection" style="display: none;">
+                <h2>記錄確認</h2>
+                <form id="locationForm">
+                    <div class="form-grid">
+                        <div class="input-group">
+                            <label for="locationName">地點名稱:</label>
+                            <input type="text" id="locationName" required>
+                        </div>
+                        <div class="input-group">
+                            <label for="equipmentName">儀器名稱:</label>
+                            <input type="text" id="equipmentName" required>
+                        </div>
+                        <div class="input-group">
+                            <label for="operator">操作人員:</label>
+                            <input type="text" id="operator" required>
+                        </div>
+                        <div class="input-group">
+                            <label for="recordNotes">備註:</label>
+                            <textarea id="recordNotes" rows="3"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" onclick="saveLocationRecord()" class="btn btn-success">儲存記錄</button>
+                        <button type="button" onclick="resetProcess()" class="btn btn-secondary">重新開始</button>
+                    </div>
+                </form>
+            </section>
+
+            <!-- 最近記錄 -->
+            <section class="list-section">
+                <h2>最近記錄</h2>
+                <div id="recordList" class="record-list"></div>
+                <button onclick="loadRecordList()" class="btn btn-outline">重新載入記錄</button>
+            </section>
+        </main>
+    </div>
+
+    <script src="scanner.js"></script>
+    <script src="sheets-api.js"></script>
+    <script src="location-tracking.js"></script>
+</body>
+
+</html>

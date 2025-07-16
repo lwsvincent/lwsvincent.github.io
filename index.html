@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>財產盤點系統</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://unpkg.com/@zxing/library@latest"></script>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>財產盤點系統</h1>
+            <div class="nav-buttons">
+                <button onclick="location.href='location-tracking.html'" class="nav-btn">地點記錄</button>
+            </div>
+        </header>
+
+        <main>
+            <!-- Google Sheets 設定區 -->
+            <section class="config-section">
+                <h2>Google Sheets 設定</h2>
+                <div class="input-group">
+                    <label for="sheetsUrl">Google Sheets URL:</label>
+                    <input type="text" id="sheetsUrl" placeholder="貼上您的 Google Sheets 分享連結">
+                </div>
+                <div class="input-group">
+                    <label for="worksheetName">工作表名稱:</label>
+                    <input type="text" id="worksheetName" value="財產清單" placeholder="工作表名稱">
+                </div>
+                <button onclick="connectToSheets()" class="btn btn-primary">連接試算表</button>
+                <div id="connectionStatus" class="status"></div>
+            </section>
+
+            <!-- QR Code 掃描區 -->
+            <section class="scanner-section">
+                <h2>掃描 QR Code</h2>
+                <div class="scanner-container">
+                    <video id="video" autoplay muted playsinline></video>
+                    <canvas id="canvas" style="display: none;"></canvas>
+                </div>
+                <div class="scanner-controls">
+                    <button onclick="startScanner()" class="btn btn-primary">開始掃描</button>
+                    <button onclick="stopScanner()" class="btn btn-secondary">停止掃描</button>
+                </div>
+                <div id="scanResult" class="scan-result"></div>
+            </section>
+
+            <!-- 手動輸入區 -->
+            <section class="manual-input-section">
+                <h2>手動輸入</h2>
+                <div class="input-group">
+                    <label for="assetCode">財產編號:</label>
+                    <input type="text" id="assetCode" placeholder="例如: 1000-F007485-00008">
+                </div>
+                <button onclick="processAssetCode()" class="btn btn-primary">處理財產編號</button>
+            </section>
+
+            <!-- 資產資訊編輯區 -->
+            <section class="edit-section" id="editSection" style="display: none;">
+                <h2>資產資訊</h2>
+                <form id="assetForm">
+                    <div class="form-grid">
+                        <div class="input-group">
+                            <label for="serialNumber">序號:</label>
+                            <input type="text" id="serialNumber" readonly>
+                        </div>
+                        <div class="input-group">
+                            <label for="subSerial">子序號:</label>
+                            <input type="text" id="subSerial" readonly>
+                        </div>
+                        <div class="input-group">
+                            <label for="assetName">資產名稱:</label>
+                            <input type="text" id="assetName" required>
+                        </div>
+                        <div class="input-group">
+                            <label for="category">分類:</label>
+                            <select id="category">
+                                <option value="">選擇分類</option>
+                                <option value="電腦設備">電腦設備</option>
+                                <option value="辦公設備">辦公設備</option>
+                                <option value="測試儀器">測試儀器</option>
+                                <option value="其他">其他</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label for="department">部門:</label>
+                            <input type="text" id="department">
+                        </div>
+                        <div class="input-group">
+                            <label for="location">位置:</label>
+                            <input type="text" id="location">
+                        </div>
+                        <div class="input-group">
+                            <label for="condition">狀態:</label>
+                            <select id="condition">
+                                <option value="">選擇狀態</option>
+                                <option value="正常">正常</option>
+                                <option value="維修中">維修中</option>
+                                <option value="報廢">報廢</option>
+                                <option value="遺失">遺失</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label for="notes">備註:</label>
+                            <textarea id="notes" rows="3"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" onclick="saveAsset()" class="btn btn-success">儲存</button>
+                        <button type="button" onclick="clearForm()" class="btn btn-secondary">清除</button>
+                    </div>
+                </form>
+            </section>
+
+            <!-- 資產列表 -->
+            <section class="list-section">
+                <h2>最近更新的資產</h2>
+                <div id="assetList" class="asset-list"></div>
+                <button onclick="loadAssetList()" class="btn btn-outline">重新載入列表</button>
+            </section>
+        </main>
+    </div>
+
+    <script src="scanner.js"></script>
+    <script src="sheets-api.js"></script>
+    <script src="main.js"></script>
+</body>
+
+</html>
