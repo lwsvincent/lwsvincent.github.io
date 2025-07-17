@@ -19,3 +19,4 @@ Thumbs.db
 # 備份檔案
 *.bak
 *.backup
+*.md
