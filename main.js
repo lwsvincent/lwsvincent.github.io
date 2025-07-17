@@ -5,6 +5,8 @@ let currentAsset = null;
 
 // 設定掃描回調
 window.currentScanCallback = function (result) {
+    console.log('掃描回調被調用:', result);
+
     try {
         // 解析 QR Code
         const assetData = qrScanner.parseAssetCode(result);
@@ -23,11 +25,11 @@ window.currentScanCallback = function (result) {
         loadExistingAssetData(assetData.key);
 
         // 顯示成功訊息
-        qrScanner.showMessage(`✅ 已識別資產: ${assetData.key}`, 'success');
+        showMessage(`✅ 已識別資產: ${assetData.key}`, 'success');
 
     } catch (error) {
         console.error('解析 QR Code 失敗:', error);
-        qrScanner.showMessage(`❌ 解析失敗: ${error.message}`, 'error');
+        showMessage(`❌ 解析失敗: ${error.message}`, 'error');
     }
 };
 

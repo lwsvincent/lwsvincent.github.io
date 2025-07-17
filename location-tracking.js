@@ -1,7 +1,20 @@
-// 地點記錄功能
+// 地點記錄功能// 設定掃描回調
+window.currentScanCallback = function (result) {
+    console.log('地點記錄掃描回調被調用:', result);
 
-// 當前掃描狀態
-let scanState = {
+    try {
+        if (scanState.currentStep === 1) {
+            // 處理地點 QR Code
+            setLocation(result);
+        } else if (scanState.currentStep === 2) {
+            // 處理儀器 QR Code
+            setEquipment(result);
+        }
+    } catch (error) {
+        console.error('處理掃描結果失敗:', error);
+        showMessage(`❌ 處理失敗: ${error.message}`, 'error');
+    }
+}; let scanState = {
     currentStep: 1, // 1: 掃描地點, 2: 掃描儀器, 3: 確認儲存
     location: null,
     equipment: null
