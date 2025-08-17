@@ -169,6 +169,18 @@ section h2 {
     color: white;
 }
 
+.btn-warning {
+    background: #ffc107;
+    color: #212529;
+    border: 2px solid #ffc107;
+}
+
+.btn-warning:hover {
+    background: #e0a800;
+    border-color: #d39e00;
+    transform: translateY(-2px);
+}
+
 .btn-small {
     padding: 0.5rem 1rem;
     font-size: 0.875rem;
@@ -292,6 +304,44 @@ section h2 {
 .status-value {
     font-weight: bold;
     color: #333;
+}
+
+.saved-indicator {
+    font-size: 0.8rem;
+    color: #28a745;
+    font-weight: 500;
+    margin-top: 0.25rem;
+}
+
+.form-info {
+    background: #e8f4fd;
+    border-left: 4px solid #007bff;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border-radius: 0 8px 8px 0;
+}
+
+.form-info p {
+    margin: 0.5rem 0;
+    color: #0056b3;
+}
+
+.remember-me {
+    margin-top: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.remember-me input[type="checkbox"] {
+    width: auto;
+    margin: 0;
+}
+
+.remember-me label {
+    font-size: 0.9rem;
+    color: #666;
+    cursor: pointer;
 }
 
 .status {

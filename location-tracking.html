@@ -20,19 +20,16 @@
         </header>
 
         <main>
-            <!-- Google Sheets 設定區 -->
+            <!-- Google Forms 設定區 -->
             <section class="config-section">
-                <h2>Google Sheets 設定</h2>
-                <div class="input-group">
-                    <label for="sheetsUrl">Google Sheets URL:</label>
-                    <input type="text" id="sheetsUrl" placeholder="貼上您的 Google Sheets 分享連結">
+                <h2>Google Forms 設定</h2>
+                <div class="form-info">
+                    <p>📝 資料將直接提交到 Google Forms</p>
+                    <p>✅ 無需額外設定，開始使用即可</p>
                 </div>
-                <div class="input-group">
-                    <label for="worksheetName">工作表名稱:</label>
-                    <input type="text" id="worksheetName" value="位置記錄" placeholder="工作表名稱">
+                <div id="connectionStatus" class="status">
+                    <div class="message success">✅ Google Forms 已準備就緒</div>
                 </div>
-                <button onclick="connectToSheets()" class="btn btn-primary">連接試算表</button>
-                <div id="connectionStatus" class="status"></div>
             </section>
 
             <!-- 步驟指示 -->
@@ -74,6 +71,7 @@
                     <button onclick="startScanner()" class="btn btn-primary">開始掃描</button>
                     <button onclick="stopScanner()" class="btn btn-secondary">停止掃描</button>
                     <button onclick="resetProcess()" class="btn btn-outline">重新開始</button>
+                    <button onclick="clearLocationAndReset()" class="btn btn-warning" id="clearLocationBtn" style="display: none;">清除地點</button>
                 </div>
                 <div id="scanResult" class="scan-result"></div>
             </section>
@@ -102,6 +100,7 @@
                     <div class="status-item">
                         <div class="status-label">地點:</div>
                         <div id="currentLocation" class="status-value">未設定</div>
+                        <div id="savedLocationIndicator" class="saved-indicator" style="display: none;">✅ 已保存</div>
                     </div>
                     <div class="status-item">
                         <div class="status-label">儀器:</div>
@@ -120,20 +119,12 @@
                 <form id="locationForm">
                     <div class="form-grid">
                         <div class="input-group">
-                            <label for="locationName">地點名稱:</label>
-                            <input type="text" id="locationName" required>
-                        </div>
-                        <div class="input-group">
-                            <label for="equipmentName">儀器名稱:</label>
-                            <input type="text" id="equipmentName" required>
-                        </div>
-                        <div class="input-group">
-                            <label for="operator">操作人員:</label>
-                            <input type="text" id="operator" required>
-                        </div>
-                        <div class="input-group">
-                            <label for="recordNotes">備註:</label>
-                            <textarea id="recordNotes" rows="3"></textarea>
+                            <label for="operator">記錄人員 ID:</label>
+                            <input type="text" id="operator" required placeholder="輸入記錄人員 ID">
+                            <div class="remember-me">
+                                <input type="checkbox" id="rememberUser" checked>
+                                <label for="rememberUser">記住我的 ID</label>
+                            </div>
                         </div>
                     </div>
                     <div class="form-actions">
@@ -143,17 +134,15 @@
                 </form>
             </section>
 
-            <!-- 最近記錄 -->
+            <!-- 記錄查看 -->
             <section class="list-section">
-                <h2>最近記錄</h2>
+                <h2>查看記錄</h2>
                 <div id="recordList" class="record-list"></div>
-                <button onclick="loadRecordList()" class="btn btn-outline">重新載入記錄</button>
             </section>
         </main>
     </div>
 
     <script src="scanner.js"></script>
-    <script src="sheets-api.js"></script>
     <script src="location-tracking.js"></script>
 </body>
 
