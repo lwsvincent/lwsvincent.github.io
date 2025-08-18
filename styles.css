@@ -426,11 +426,15 @@ section h2 {
 .status-row {
     display: flex;
     gap: 0.75rem;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .status-row .status-item {
     flex: 1;
     margin-bottom: 0;
+    min-width: 0; /* Allows flex items to shrink below their content size */
+    overflow: hidden;
 }
 
 .status-row .label {
@@ -455,6 +459,9 @@ section h2 {
     font-size: 0.9rem;
     background: #18181b;
     color: #e4e4e7;
+    min-width: 0; /* Allow inputs to shrink */
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .location-input:focus,
@@ -603,6 +610,16 @@ section h2 {
     .mobile-status, .mobile-form {
         padding: 1rem;
         margin: 0.5rem 0;
+    }
+    
+    /* Stack status-row vertically on very small screens */
+    .status-row {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    .status-row .status-item {
+        width: 100%;
     }
 }
 
