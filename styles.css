@@ -10,12 +10,14 @@ body {
     line-height: 1.6;
     color: #333;
     background-color: #f5f5f5;
+    font-size: 16px;
+    -webkit-text-size-adjust: 100%;
 }
 
 .container {
     max-width: 100%;
     margin: 0 auto;
-    padding: 0 16px;
+    padding: 0 12px;
 }
 
 /* 標題和導航 */
@@ -29,8 +31,8 @@ header {
 
 header h1 {
     text-align: center;
-    margin-bottom: 1rem;
-    font-size: 1.8rem;
+    margin-bottom: 0.5rem;
+    font-size: 1.5rem;
 }
 
 .nav-buttons {
@@ -349,6 +351,216 @@ section h2 {
     padding: 1rem;
     border-radius: 8px;
     font-weight: 500;
+}
+
+/* 手機版專用樣式 */
+.mobile-status {
+    background: white;
+    border-radius: 12px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.mobile-status h2 {
+    text-align: center;
+    color: #667eea;
+    margin-bottom: 1rem;
+    font-size: 1.2rem;
+}
+
+.status-display {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.status-display .status-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem;
+    background: #f8f9fa;
+    border-radius: 8px;
+    border-left: 4px solid #667eea;
+}
+
+.status-display .label {
+    font-weight: 600;
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.status-display .value {
+    font-weight: bold;
+    color: #333;
+    font-size: 1rem;
+}
+
+.location-item {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 0.5rem;
+}
+
+.location-input-group {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.location-input-group .label {
+    min-width: 50px;
+    margin: 0;
+}
+
+.location-input {
+    flex: 1;
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    background: white;
+}
+
+.location-input:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.2);
+}
+
+.btn-mini {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 6px;
+    background: #28a745;
+    color: white;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-mini:hover {
+    background: #218838;
+    transform: translateY(-1px);
+}
+
+.scanner-container {
+    position: relative;
+    margin-bottom: 1rem;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.scanner-container video {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+}
+
+.scanner-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.control-row {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.control-row button {
+    flex: 1;
+}
+
+.btn-large {
+    padding: 1rem 2rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    border-radius: 12px;
+    width: 100%;
+}
+
+.mobile-form {
+    background: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin: 1rem 0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.mobile-form .input-group {
+    margin-bottom: 1.5rem;
+}
+
+.mobile-form label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: #333;
+}
+
+.mobile-form input[type="text"] {
+    width: 100%;
+    padding: 1rem;
+    border: 2px solid #e1e5e9;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+}
+
+.mobile-form input[type="text"]:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.save-section {
+    background: white;
+    border-radius: 12px;
+    padding: 1rem;
+    margin: 1rem 0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+/* 隱藏桌面版元素 */
+.steps-section,
+.config-section,
+.manual-input-section,
+.list-section {
+    display: none;
+}
+
+/* 響應式調整 */
+@media (max-width: 480px) {
+    .container {
+        padding: 0 8px;
+    }
+    
+    header {
+        margin-bottom: 1rem;
+    }
+    
+    header h1 {
+        font-size: 1.3rem;
+    }
+    
+    .scanner-container video {
+        height: 200px;
+    }
+    
+    .btn-large {
+        padding: 0.875rem 1.5rem;
+        font-size: 1rem;
+    }
+    
+    .mobile-status, .mobile-form {
+        padding: 1rem;
+        margin: 0.5rem 0;
+    }
 }
 
 .status.success {

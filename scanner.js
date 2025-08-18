@@ -1,6 +1,11 @@
 // QR Code 掃描器功能
 class QRScanner {
     constructor() {
+        if (typeof ZXing === 'undefined') {
+            console.error('ZXing library not loaded');
+            this.showMessage('❌ QR Code 掃描庫載入失敗，請重新整理頁面', 'error');
+            return;
+        }
         this.codeReader = new ZXing.BrowserQRCodeReader();
         this.scanning = false;
         this.stream = null;
@@ -13,6 +18,11 @@ class QRScanner {
 
     async startScanning(callback) {
         if (this.scanning) return;
+        
+        if (!this.codeReader) {
+            this.showMessage('❌ QR Code 掃描器未初始化，請重新整理頁面', 'error');
+            return;
+        }
 
         try {
             this.scanning = true;

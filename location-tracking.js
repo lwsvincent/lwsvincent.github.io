@@ -138,12 +138,21 @@ function setLocation(locationCode) {
 
 // 更新地點顯示
 function updateLocationDisplay(locationCode) {
-    document.getElementById('currentLocation').textContent = locationCode;
     document.getElementById('locationCode').value = locationCode;
     
     // 顯示已保存指示
     document.getElementById('savedLocationIndicator').style.display = 'block';
     document.getElementById('clearLocationBtn').style.display = 'inline-block';
+}
+
+// 手動設定地點
+function setLocationManually() {
+    const locationCode = document.getElementById('locationCode').value.trim();
+    if (!locationCode) {
+        alert('請輸入地點代碼');
+        return;
+    }
+    setLocation(locationCode);
 }
 
 // 清除保存的地點並重置
@@ -158,19 +167,22 @@ function clearLocationAndReset() {
     };
     
     // 重置顯示
-    document.getElementById('currentLocation').textContent = '未設定';
+    document.getElementById('locationCode').value = '';
     document.getElementById('currentEquipment').textContent = '未設定';
-    document.getElementById('currentTime').textContent = '-';
     document.getElementById('savedLocationIndicator').style.display = 'none';
     document.getElementById('clearLocationBtn').style.display = 'none';
     
     // 清除輸入欄位
-    document.getElementById('locationCode').value = '';
-    document.getElementById('equipmentCode').value = '';
-    document.getElementById('operator').value = '';
+    const operatorInput = document.getElementById('operator');
+    if (operatorInput) {
+        operatorInput.value = '';
+    }
     
     // 重置記住我選項
-    document.getElementById('rememberUser').checked = false;
+    const rememberUserCheckbox = document.getElementById('rememberUser');
+    if (rememberUserCheckbox) {
+        rememberUserCheckbox.checked = false;
+    }
     
     // 重置步驟顯示
     updateStepDisplay(1, 'active');
@@ -207,7 +219,6 @@ function setEquipment(equipmentCode) {
 
     // 更新顯示
     document.getElementById('currentEquipment').textContent = equipmentCode;
-    document.getElementById('equipmentCode').value = equipmentCode;
 
     // 更新步驟狀態
     updateStepDisplay(2, 'completed');
@@ -223,39 +234,10 @@ function setEquipment(equipmentCode) {
     showMessage('✅ 儀器已設定，請填寫詳細資訊並儲存', 'success');
 }
 
-// 手動設定地點
-function setLocationManually() {
-    const locationCode = document.getElementById('locationCode').value.trim();
-    if (!locationCode) {
-        alert('請輸入地點代碼');
-        return;
-    }
-    setLocation(locationCode);
-}
 
-// 手動設定儀器
-function setEquipmentManually() {
-    const equipmentCode = document.getElementById('equipmentCode').value.trim();
-    if (!equipmentCode) {
-        alert('請輸入儀器編號');
-        return;
-    }
-    setEquipment(equipmentCode);
-}
-
-// 更新步驟顯示
+// 更新步驟顯示 (簡化版，不再需要視覺步驟指示)
 function updateStepDisplay(stepNumber, status) {
-    const stepElement = document.getElementById(`step${stepNumber}`);
-    if (stepElement) {
-        stepElement.className = `step ${status}`;
-    }
-}
-
-// 更新時間顯示
-function updateTimeDisplay() {
-    const now = new Date();
-    document.getElementById('currentTime').textContent =
-        now.toLocaleString('zh-TW');
+    // 保留函數以避免錯誤，但不執行任何操作
 }
 
 // 儲存位置記錄
@@ -299,11 +281,14 @@ async function saveLocationRecord() {
         const time = now.toTimeString().split(' ')[0].substring(0, 5); // HH:MM
 
         // 檢查是否要記住用戶 ID
-        const rememberUser = document.getElementById('rememberUser').checked;
-        if (rememberUser) {
-            saveUserIdToStorage(operatorId);
-        } else {
-            clearSavedUserId();
+        const rememberUserCheckbox = document.getElementById('rememberUser');
+        if (rememberUserCheckbox) {
+            const rememberUser = rememberUserCheckbox.checked;
+            if (rememberUser) {
+                saveUserIdToStorage(operatorId);
+            } else {
+                clearSavedUserId();
+            }
         }
 
         // 提交到 Google Forms
@@ -370,7 +355,6 @@ function resetProcess() {
         // 更新顯示
         updateLocationDisplay(savedLocation);
         document.getElementById('currentEquipment').textContent = '未設定';
-        document.getElementById('currentTime').textContent = '-';
         
         // 重置步驟顯示
         updateStepDisplay(1, 'completed');
@@ -390,9 +374,8 @@ function resetProcess() {
         };
         
         // 重置顯示
-        document.getElementById('currentLocation').textContent = '未設定';
+        document.getElementById('locationCode').value = '';
         document.getElementById('currentEquipment').textContent = '未設定';
-        document.getElementById('currentTime').textContent = '-';
         
         // 重置步驟顯示
         updateStepDisplay(1, 'active');
@@ -405,33 +388,21 @@ function resetProcess() {
         showMessage('🔄 流程已重置，請掃描地點 QR Code', 'info');
     }
 
-    // 清除輸入欄位
-    document.getElementById('equipmentCode').value = '';
-    
     // 只有在沒有勾選記住我時才清除用戶 ID
-    const rememberUser = document.getElementById('rememberUser').checked;
-    if (!rememberUser) {
-        document.getElementById('operator').value = '';
+    const rememberUserCheckbox = document.getElementById('rememberUser');
+    const operatorInput = document.getElementById('operator');
+    
+    if (rememberUserCheckbox && operatorInput) {
+        const rememberUser = rememberUserCheckbox.checked;
+        if (!rememberUser) {
+            operatorInput.value = '';
+        }
     }
 
     // 隱藏記錄表單
     document.getElementById('recordSection').style.display = 'none';
 }
 
-// 載入記錄列表
-function loadRecordList() {
-    // Google Forms 提交後無法直接讀取記錄，顯示提示訊息
-    document.getElementById('recordList').innerHTML = `
-        <div class="message info">
-            <p>📝 記錄已提交到 Google Forms</p>
-            <p>請至 Google Forms 回應頁面查看所有記錄</p>
-            <a href="https://docs.google.com/forms/d/e/1FAIpQLSckXIY2Hw9Kod5HbYKsSMcdWIs5m0jV6eActAvm5FHWPUTHwg/viewanalytics" 
-               target="_blank" class="btn btn-outline" style="margin-top: 10px;">
-               查看 Google Forms 回應
-            </a>
-        </div>
-    `;
-}
 
 // 顯示訊息
 function showMessage(message, type = 'info') {
@@ -464,9 +435,12 @@ function showMessage(message, type = 'info') {
 document.addEventListener('DOMContentLoaded', function () {
     // 檢查是否有保存的用戶 ID
     const savedUserId = getSavedUserId();
-    if (savedUserId) {
-        document.getElementById('operator').value = savedUserId;
-        document.getElementById('rememberUser').checked = true;
+    const operatorInput = document.getElementById('operator');
+    const rememberUserCheckbox = document.getElementById('rememberUser');
+    
+    if (savedUserId && operatorInput && rememberUserCheckbox) {
+        operatorInput.value = savedUserId;
+        rememberUserCheckbox.checked = true;
     }
     
     // 檢查是否有保存的地點
@@ -495,13 +469,7 @@ document.addEventListener('DOMContentLoaded', function () {
         updateStepDisplay(1, 'active');
     }
 
-    // 定期更新時間顯示
-    setInterval(updateTimeDisplay, 1000);
 
-    // 載入記錄列表
-    setTimeout(() => {
-        loadRecordList();
-    }, 2000);
 
     // 自動請求攝像頭權限
     requestCameraPermission();
@@ -525,12 +493,4 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    const equipmentCodeInput = document.getElementById('equipmentCode');
-    if (equipmentCodeInput) {
-        equipmentCodeInput.addEventListener('keypress', function (e) {
-            if (e.key === 'Enter') {
-                setEquipmentManually();
-            }
-        });
-    }
 });
