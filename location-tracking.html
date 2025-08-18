@@ -30,15 +30,29 @@
 
             <!-- 當前狀態 -->
             <section class="mobile-status">
-                <h2 id="scannerTitle">掃描地點 QR Code</h2>
                 <div class="status-display">
-                    <div class="status-item location-item">
-                        <div class="location-input-group">
-                            <label class="label">地點:</label>
-                            <input type="text" id="locationCode" class="location-input" placeholder="掃描或輸入地點代碼">
-                            <button onclick="setLocationManually()" class="btn btn-mini">✓</button>
+                    <div class="status-row">
+                        <div class="status-item location-item">
+                            <div class="location-input-group">
+                                <label class="label">地點:</label>
+                                <input type="text" id="locationCode" class="compact-input" placeholder="地點代碼">
+                                <button onclick="setLocationManually()" class="btn btn-mini">✓</button>
+                            </div>
+                            <div class="remember-location">
+                                <input type="checkbox" id="rememberLocation" checked>
+                                <label for="rememberLocation">記住地點</label>
+                            </div>
                         </div>
-                        <div id="savedLocationIndicator" class="saved-indicator" style="display: none;">✅ 已保存</div>
+                        <div class="status-item user-item">
+                            <div class="user-input-group">
+                                <label class="label" for="operator">人員 ID:</label>
+                                <input type="text" id="operator" class="compact-input" required placeholder="記錄人員 ID">
+                            </div>
+                            <div class="remember-me">
+                                <input type="checkbox" id="rememberUser" checked>
+                                <label for="rememberUser">記住我的 ID</label>
+                            </div>
+                        </div>
                     </div>
                     <div class="status-item">
                         <span class="label">儀器:</span>
@@ -55,26 +69,11 @@
                 </div>
                 <div class="scanner-controls">
                     <button onclick="startScanner()" class="btn btn-primary btn-large">📷 開始掃描</button>
-                    <div class="control-row">
-                        <button onclick="resetProcess()" class="btn btn-outline">🔄 重新開始</button>
-                        <button onclick="clearLocationAndReset()" class="btn btn-warning" id="clearLocationBtn" style="display: none;">🗑️ 清除地點</button>
-                    </div>
                 </div>
                 <div id="scanResult" class="scan-result"></div>
             </section>
 
 
-            <!-- 用戶 ID -->
-            <section class="mobile-form">
-                <div class="input-group">
-                    <label for="operator">記錄人員 ID:</label>
-                    <input type="text" id="operator" required placeholder="輸入記錄人員 ID">
-                    <div class="remember-me">
-                        <input type="checkbox" id="rememberUser" checked>
-                        <label for="rememberUser">記住我的 ID</label>
-                    </div>
-                </div>
-            </section>
 
             <!-- 儲存按鈕 -->
             <section class="save-section" id="recordSection" style="display: none;">

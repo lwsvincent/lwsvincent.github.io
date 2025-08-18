@@ -131,7 +131,7 @@ function setLocation(locationCode) {
     scanState.currentStep = 2;
 
     // 更新掃描器標題
-    document.getElementById('scannerTitle').textContent = '掃描儀器 QR Code';
+    // scannerTitle removed = '掃描儀器 QR Code';
 
     showMessage('✅ 地點已設定並保存，請掃描儀器 QR Code', 'success');
 }
@@ -141,8 +141,7 @@ function updateLocationDisplay(locationCode) {
     document.getElementById('locationCode').value = locationCode;
     
     // 顯示已保存指示
-    document.getElementById('savedLocationIndicator').style.display = 'block';
-    document.getElementById('clearLocationBtn').style.display = 'inline-block';
+    // savedLocationIndicator removed
 }
 
 // 手動設定地點
@@ -169,7 +168,7 @@ function clearLocationAndReset() {
     // 重置顯示
     document.getElementById('locationCode').value = '';
     document.getElementById('currentEquipment').textContent = '未設定';
-    document.getElementById('savedLocationIndicator').style.display = 'none';
+    // savedLocationIndicator removed
     document.getElementById('clearLocationBtn').style.display = 'none';
     
     // 清除輸入欄位
@@ -193,7 +192,7 @@ function clearLocationAndReset() {
     document.getElementById('recordSection').style.display = 'none';
     
     // 重置掃描器標題
-    document.getElementById('scannerTitle').textContent = '掃描地點 QR Code';
+    // scannerTitle removed = '掃描地點 QR Code';
     
     showMessage('🔄 已清除保存的地點，請重新掃描地點 QR Code', 'info');
 }
@@ -291,6 +290,13 @@ async function saveLocationRecord() {
             }
         }
 
+        // 檢查是否要記住地點
+        const rememberLocationCheckbox = document.getElementById('rememberLocation');
+        if (rememberLocationCheckbox && !rememberLocationCheckbox.checked) {
+            // 如果未勾選記住地點，清除保存的地點
+            clearSavedLocation();
+        }
+
         // 提交到 Google Forms
         await submitToGoogleForm({
             serialNumber,
@@ -362,7 +368,7 @@ function resetProcess() {
         updateStepDisplay(3, '');
         
         // 更新掃描器標題
-        document.getElementById('scannerTitle').textContent = '掃描儀器 QR Code';
+        // scannerTitle removed = '掃描儀器 QR Code';
         
         showMessage(`🔄 使用已保存的地點: ${savedLocation}，請掃描儀器 QR Code`, 'info');
     } else {
@@ -383,7 +389,7 @@ function resetProcess() {
         updateStepDisplay(3, '');
         
         // 重置掃描器標題
-        document.getElementById('scannerTitle').textContent = '掃描地點 QR Code';
+        // scannerTitle removed = '掃描地點 QR Code';
         
         showMessage('🔄 流程已重置，請掃描地點 QR Code', 'info');
     }
@@ -443,6 +449,12 @@ document.addEventListener('DOMContentLoaded', function () {
         rememberUserCheckbox.checked = true;
     }
     
+    // 初始化記住地點選項（預設為勾選）
+    const rememberLocationCheckbox = document.getElementById('rememberLocation');
+    if (rememberLocationCheckbox) {
+        rememberLocationCheckbox.checked = true;
+    }
+    
     // 檢查是否有保存的地點
     const savedLocation = getSavedLocation();
     
@@ -461,7 +473,7 @@ document.addEventListener('DOMContentLoaded', function () {
         updateLocationDisplay(savedLocation);
         updateStepDisplay(1, 'completed');
         updateStepDisplay(2, 'active');
-        document.getElementById('scannerTitle').textContent = '掃描儀器 QR Code';
+        // scannerTitle removed = '掃描儀器 QR Code';
         
         showMessage(`🔄 已自動載入保存的地點: ${savedLocation}，請掃描儀器 QR Code`, 'info');
     } else {

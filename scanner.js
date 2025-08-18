@@ -197,8 +197,16 @@ class QRScanner {
         if (this.scanCallback && typeof this.scanCallback === 'function') {
             this.scanCallback(text);
         }
-    } showMessage(message, type = 'info') {
-        this.result.innerHTML = `<div class="message ${type}">${message}</div>`;
+    }
+
+    showMessage(message, type = 'info') {
+        if (!message || message.trim() === '') {
+            this.result.style.display = 'none';
+            this.result.innerHTML = '';
+        } else {
+            this.result.style.display = 'block';
+            this.result.innerHTML = `<div class="message ${type}">${message}</div>`;
+        }
     }
 
     // 解析財產編號
