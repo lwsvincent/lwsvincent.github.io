@@ -583,7 +583,7 @@ section h2 {
 }
 
 /* 響應式調整 */
-@media (max-width: 480px) {
+@media (max-width: 768px) {
     .container {
         padding: 0 8px;
     }
@@ -612,14 +612,21 @@ section h2 {
         margin: 0.5rem 0;
     }
     
-    /* Stack status-row vertically on very small screens */
-    .status-row {
-        flex-direction: column;
+    /* Stack status-row vertically on mobile screens */
+    .mobile-status .status-display .status-row {
+        flex-direction: column !important;
         gap: 0.5rem;
+        width: 100%;
     }
     
-    .status-row .status-item {
-        width: 100%;
+    .mobile-status .status-display .status-row .status-item {
+        width: 100% !important;
+        flex: none !important;
+        margin-bottom: 0.5rem;
+    }
+    
+    .mobile-status .status-display .status-row .status-item:last-child {
+        margin-bottom: 0;
     }
 }
 
