@@ -144,8 +144,8 @@ function updateLocationDisplay(locationCode) {
     // savedLocationIndicator removed
 }
 
-// 手動設定地點
-function setLocationManually() {
+// 記住地點功能
+function rememberLocation() {
     const locationCode = document.getElementById('locationCode').value.trim();
     if (!locationCode) {
         alert('請輸入地點代碼');
@@ -227,8 +227,6 @@ function setEquipment(equipmentCode) {
     // 顯示記錄表單
     document.getElementById('recordSection').style.display = 'block';
 
-    // 更新時間顯示
-    updateTimeDisplay();
 
     showMessage('✅ 儀器已設定，請填寫詳細資訊並儲存', 'success');
 }
@@ -248,6 +246,22 @@ async function saveLocationRecord() {
 
     try {
         const operatorId = document.getElementById('operator').value.trim();
+        
+        // 重新取得地點代碼（以防用戶修改了輸入欄位）
+        const currentLocationCode = document.getElementById('locationCode').value.trim();
+        if (!currentLocationCode) {
+            alert('請填入地點代碼');
+            return;
+        }
+        
+        // 更新 scanState 中的地點代碼為當前輸入欄位的值
+        scanState.location.code = currentLocationCode;
+        
+        // 如果勾選了記住地點，更新保存的地點
+        const rememberLocationCheckbox = document.getElementById('rememberLocation');
+        if (rememberLocationCheckbox && rememberLocationCheckbox.checked) {
+            saveLocationToStorage(currentLocationCode);
+        }
         
         // 驗證必填欄位
         if (!operatorId) {
@@ -291,7 +305,6 @@ async function saveLocationRecord() {
         }
 
         // 檢查是否要記住地點
-        const rememberLocationCheckbox = document.getElementById('rememberLocation');
         if (rememberLocationCheckbox && !rememberLocationCheckbox.checked) {
             // 如果未勾選記住地點，清除保存的地點
             clearSavedLocation();
@@ -500,7 +513,7 @@ document.addEventListener('DOMContentLoaded', function () {
     if (locationCodeInput) {
         locationCodeInput.addEventListener('keypress', function (e) {
             if (e.key === 'Enter') {
-                setLocationManually();
+                rememberLocation();
             }
         });
     }
